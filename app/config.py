@@ -8,10 +8,10 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret")
 
     # MySQL for PythonAnywhere
-    MYSQL_HOST = 'shalakapoojari.mysql.pythonanywhere-services.com'
-    MYSQL_USER = 'shalakapoojari'
-    MYSQL_PASSWORD = 'Shalaka@250125'
-    MYSQL_DB = 'shalakapoojari$sv'
+    MYSQL_HOST = 'SVEnterprise.mysql.pythonanywhere-services.com'
+    MYSQL_USER = 'SVEnterprise'
+    MYSQL_PASSWORD = 'SVE@DB21'
+    MYSQL_DB = 'SVEnterprise$sv'
     print("Loaded MAIL_USERNAME:", os.getenv("MAIL_USERNAME"))
     print("Loaded SECRET_KEY:", os.getenv("SECRET_KEY"))
 
