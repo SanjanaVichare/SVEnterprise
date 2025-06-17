@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Decorative elements -->
+    <div class="decorative-dot dot-1"></div>
+    <div class="decorative-dot dot-2"></div>
+    <div class="decorative-dot dot-3"></div>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Twinkle SVG</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #173d2d;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        #twinkle-container {
+            position: absolute;
+            cursor: grab;
+            z-index: 1000;
+        }
+        
+        #twinkle-container:active {
+            cursor: grabbing;
+        }
+        
+        .instruction {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            font-size: 14px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-clock"></i>
+            SV Enterprises
+        </div>
+        
+        <div class="nav-links">
+            <a href="#">How to use</a>
+            <a href="#">Help</a>
+        </div>
+        
+        <div class="nav-buttons">
+            <a href="{{ url_for('main.admin_login') }}">
+                <button class="admin-btn">Admin Login</button>
+            </a>
+        </div>
+        
+        <!-- Hamburger Menu Button -->
+        <div class="hamburger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <div class="mobile-nav-links">
+            <a href="#">How to use</a>
+            <a href="#">Help</a>
+        </div>
+        <div class="mobile-nav-buttons">
+            <a href="{{ url_for('main.admin_login') }}">
+                <button class="admin-btn">Admin Login</button>
+            </a>
+        </div>
+    </div>
+    
+    <div class="hero">
+        <div class="hero-content float">
+            <h1 class="fade-in" id="hero-title">Your one-stop solution for employee reports & e-ID access.<br><span>Click below to continue.</span></h1>
+            
+            <div class="center-btn fade-in" style="animation-delay: 0.6s;">
+                <a href="{{ url_for('main.employee_login') }}">
+                    <button class="demo-btn" id="login-btn">Proceed to Login</button>
+                </a>
+            </div>
+
+            
+        </div>
+    </div>
+    
+</body>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+
+</html>

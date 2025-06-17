@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form-styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    <div class="container">
+        <div class="form-card">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h1>Employee Login</h1>
+            <p class="subheading">Sign in using your employee ID & work e-mail assigned by the company.</p>
+            <form method="POST" class="login-form">
+                <div class="input-group">
+                    <input type="text" name="emp_id" id="emp_id" placeholder=" " required>
+                    <label for="emp_id">Employee ID</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" name="email" id="email" placeholder=" " required>
+                    <label for="email">Email</label>
+                </div>
+                <button type="submit" class="submit-btn">Verify OTP</button>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; Having trouble logging in? Click here</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script>
+
+</script>
+</body>
+</html>

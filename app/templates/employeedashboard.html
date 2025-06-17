@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/employeedashboard.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+</head>
+<body>
+    <div class="container">
+        <div class="background-blobs">
+            <div class="blob blob1"></div>
+            <div class="blob blob2"></div>
+            <div class="blob blob3"></div>
+        </div>
+
+        <header class="top-header">
+            <div class="logo">
+                SV Enterprises
+            </div>
+
+            <div class="user-profile">
+                 <button class="top-logout-button" onclick="handleLogout()">Logout</button>
+
+            </div>
+        </header>
+
+        <div class="welcome-section">
+            <div class="flash-messages" id="flashMessages">
+                <!-- Flash messages will be added here dynamically -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                                {% if category == 'success' %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="alert-icon">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                </svg>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <h1 class="greeting">Greetings, {{ employee.name }}!</h1>
+            <p class="welcome-text">Not sure how to continue? check out our how to use page.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Main Form Bento Box -->
+            <div class="bento-box form-box" id="form-box">
+                <div class="bento-header">
+                    <div class="bento-title-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon blue-icon">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <h2 class="bento-title form-title">Submit Your Form</h2>
+                    </div>
+                </div>
+                <div class="bento-content">
+
+                    {% if form_visible %}
+                        {% if already_submitted %}
+                            <div class="status-enabled">
+                                <div class="status-dot"></div>
+                                <span class="status-text">You have already submitted the form for {{ month_of_submission }}! Wait till next month to fill it again!</span>
+                            </div>
+                    {% else %}
+                        <div class="form-container">
+                        <form action="{{ url_for('main.submit_form') }}" method="POST" onsubmit="return validateForm()">
+                                <!-- Page 1 -->
+                                <div id="page1">
+                                    <h2>Personal Details</h2>
+
+                                    <label>Employee ID:</label>
+                                    <input type="text" name="emp_id" value="{{ employee.emp_id }}"><br>
+
+                                    <label>Full Name:</label>
+                                    <input type="text" name="name" value="{{ employee.name }}"><br>
+
+                                    <label>Mobile Number:</label>
+                                    <input type="text" name="phoneno" required  title="Enter a valid 10-digit number" value="{{ employee.phoneno }}" readonly><br>
+
+                                    <button type="button" onclick="goToPage('page1', 'page2')">Next</button>
+                                </div>
+
+                                <!-- Page 2 -->
+                                <div id="page2" style="display:none;">
+                                    <h2>Company Details</h2>
+
+                                    <label>Company Contact:</label>
+                                    <input type="text" name="company_contact" title="Enter a valid 10-digit contact number">
+
+                                    <label>Portfolio Name:</label>
+                                    <input type="text" name="portfolio_name" required  title="Enter valid portfolio name">
+
+                                    <label>Designation:</label>
+                                    <input type="text" name="designation" required value="{{ employee.designation }}"><br>
+
+                                    <label>Joining Date:</label>
+                                    <input type="date" name="doi" value="{{ employee.doi }}" required><br>
+
+                                    <label>Manager Name:</label>
+                                    <select name="manager_name" required>
+                                       <option value="">-- Select Manager --</option>
+                                          <option value="Aamir Khan">Aamir Khan</option>
+                                          <option value="Bharati Sawant">Bharati Sawant</option>
+                                          <option value="Fahad Batliwala">Fahad Batliwala</option>
+                                          <option value="Jagdish Sawant">Jagdish Sawant</option>
+                                          <option value="Jayesh Nagwekar">Jayesh Nagwekar</option>
+                                          <option value="Komal Baviskar">Komal Baviskar</option>
+                                          <option value="Ratnakar Nalawade">Ratnakar Nalawade</option>
+                                          <option value="Shivanand Shinde">Shivanand Shinde</option>
+                                          <option value="Vijay Salamwade">Vijay Salamwade</option>
+                                          <option value="Vijay Yadav">Vijay Yadav</option>
+                                          <option value="Satish Jadhav">Satish Jadhav</option>
+                                          <option value="Sachin Gilbile">Sachin Gilbile</option>
+                                          <option value="Tejas / Prakash">Tejas / Prakash</option>
+                                          <option value="Laxman Gilbile - Pune">Laxman Gilbile - Pune</option>
+                                          <option value="Appasaheb Bhosale">Appasaheb Bhosale</option>
+                                          <option value="Deepak Gupta">Deepak Gupta</option>
+                                          <option value="Vishal Mishra / Rani Yadav">Vishal Mishra / Rani Yadav</option>
+                                    </select><br>
+
+                                    <button type="button" onclick="goToPage('page2', 'page1')" class="action-btn">Back</button>
+                                    <button type="button" onclick="goToPage('page2', 'page3')" class="action-btn">Next</button>
+                                </div>
+
+                                <!-- Page 3 -->
+                                <div id="page3" style="display:none;">
+                                    <h2>Work Performance Metrics</h2>
+                                    <label>TeleCaller Name:</label>
+<input type="text" name="telecaller_name" required  title="Enter valid telecaller name">
+
+                                    <label>Allocation Count:</label>
+                                    <input type="text" name="allocation_count" required><br>
+
+                                    <label>Total Calls/Visits Made:</label>
+                                    <input type="text" name="total_calls" required><br>
+
+                                    <label>Total Monthly Collection:</label>
+                                    <input type="text" name="monthly_collection" required><br>
+
+                                    <button type="button" onclick="goToPage('page3', 'page2')">Back</button>
+                                    <button type="button" onclick="goToPage('page3', 'page4')">Next</button>
+                                </div>
+
+                                <!-- Page 4 -->
+                                <div id="page4" style="display:none;">
+                                    <h2>Bank & Verification Details</h2>
+                                    <label>Bank ID:</label>
+<input type="text" name="bank_id" pattern="^[A-Za-z0-9]{3,20}$" title="Enter valid bank ID (alphanumeric)">
+
+                                    <label>Supervisor Name:</label>
+                                    <select name="supervisor_name" required>
+                                    <option value="">-- Select Supervisor --</option>
+                                      <option value="Sachin Suryawanshi">Sachin Suryawanshi</option>
+                                      <option value="Shamika Wavhal">Shamika Wavhal</option>
+                                      <option value="Vaishali Dangat">Vaishali Dangat</option>
+                                      <option value="Meenaz Shaikh">Meenaz Shaikh</option>
+                                      <option value="Nutan Kadam">Nutan Kadam</option>
+                                      <option value="Disha Bhalerao">Disha Bhalerao</option>
+                                      <option value="Sunil Gholap">Sunil Gholap</option>
+                                      <option value="Rupesh Pawar">Rupesh Pawar</option>
+                                      <option value="Rasika More">Rasika More</option>
+                                      <option value="Krupa Nalawade">Krupa Nalawade</option>
+                                      <option value="Jyoti Singh">Jyoti Singh</option>
+                                      <option value="Karan Rathod">Karan Rathod</option>
+                                      <option value="Shubham Singh">Shubham Singh</option>
+                                      <option value="Yuvraj Chavan">Yuvraj Chavan</option>
+                                      <option value="Udaykumar Chavan">Udaykumar Chavan</option>
+                                      <option value="Pujita Jalmi">Pujita Jalmi</option>
+                                      <option value="Gauri Shirodkar">Gauri Shirodkar</option>
+                                      <option value="Mikita Khanolkar">Mikita Khanolkar</option>
+                                      <option value="Avinash Pednekar">Avinash Pednekar</option>
+                                      <option value="Siddhi Kondvilkar">Siddhi Kondvilkar</option>
+                                      <option value="Rakesh Vishwakarma">Rakesh Vishwakarma</option>
+                                      <option value="Pramod Golambare">Pramod Golambare</option>
+                                      <option value="Ram Wagh">Ram Wagh</option>
+                                      <option value="Deepak Chougale">Deepak Chougale</option>
+                                      <option value="Rohit Patil">Rohit Patil</option>
+                                      <option value="Megha Nalvade">Megha Nalvade</option>
+                                      <option value="Reshma Memon">Reshma Memon</option>
+                                      <option value="Asmita Sakapal">Asmita Sakapal</option>
+                                      <option value="Prasad Shinde">Prasad Shinde</option>
+                                      <option value="Ashwini Khair">Ashwini Khair</option>
+                                      <option value="Ganesh Yadav">Ganesh Yadav</option>
+                                      <option value="Divya Sharma">Divya Sharma</option>
+                                      <option value="Ratnesh Bandari">Ratnesh Bandari</option>
+                                      <option value="Chetan Palav">Chetan Palav</option>
+                                      <option value="Shahid Ansari">Shahid Ansari</option>
+                                      <option value="Mayur Chaughle">Mayur Chaughle</option>
+                                      <option value="Sarita Prajapat">Sarita Prajapat</option>
+                                    </select><br>
+
+                                    <label for="month">Month of submission:</label>
+                                    <input type="text" name="month_of_submission" id="month_of_submission" value="{{ month_of_submission }}" readonly><br>
+
+                                    <button type="button" onclick="goToPage('page4', 'page3')">Back</button>
+                                    <button type="submit">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="status-enabled">
+                        <div class="status-dot enabled"></div>
+                        <span class="status-text">Form is currently disabled.</span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+            <!-- E-ID Bento Box -->
+            <div class="bento-box eid-box" id="eid-box">
+                <div class="bento-header">
+                    <div class="bento-title-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon blue-icon">
+                            <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <path d="M9 14l2 2 4-4"></path>
+                        </svg>
+                        <h2 class="bento-title eid-title">E-ID Access</h2>
+                    </div>
+                </div>
+                <div class="bento-content">
+                    <p class="bento-description eid-description">Access your electronic ID card for verification</p>
+
+                    <button class="access-eid-button" id="access-eid-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button-icon">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        <span class="access-btn-text">Access E-ID</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Car Search Bento Box (New) -->
+            <div class="bento-box car-search-box clickable-box" id="car-search-box">
+                <div class="bento-header">
+                    <div class="bento-title-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon blue-icon">
+                            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2"></path>
+                            <circle cx="7" cy="17" r="2"></circle>
+                            <circle cx="17" cy="17" r="2"></circle>
+                        </svg>
+                        <h2 class="bento-title car-search-title">Car Search</h2>
+                    </div>
+                </div>
+                <div class="bento-content">
+                    <p class="bento-description car-search-description">Search for vehicle information by registration number</p>
+
+                    <div class="car-search-form">
+                        <form action="{{ url_for('main.search_car') }}" method="post" class="form-group" id="carSearchForm">
+                            <button type="submit" id="searchCarBtn" class="car-search-button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button-icon">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <span>Search For Vehicles</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Confirm action</h2>
+                <button class="close-modal-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18"></path>
+                        <path d="M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-cancel" class="secondary-btn">Cancel</button>
+                <button id="modal-confirm" class="action-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

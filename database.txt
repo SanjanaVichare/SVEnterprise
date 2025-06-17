@@ -1,0 +1,229 @@
+1) 
+Create the Database
+sql
+CREATE DATABASE employee_portal;
+USE employee_portal;
+
+2) 
+Create admins Table
+Stores admin login credentials.
+
+3)
+sql
+CREATE TABLE admins (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    emp_id VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+4)
+(Insert Admins)
+
+sql
+INSERT INTO admins (emp_id, password) VALUES
+('SV_001', 'somepassword1'),
+('SV_002', 'somepassword2'),
+('SV_003', 'somepassword3'),
+('SV_004', 'somepassword4');
+
+5)
+Stores employee login details.
+
+sql
+CREATE TABLE employees (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    emp_id VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    otp VARCHAR(10),
+    otp_generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+6)
+Create login_records Table
+Stores employee login history.
+
+sql
+CREATE TABLE login_records (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    emp_id VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employees(emp_id) ON DELETE CASCADE
+);
+
+7)
+Create form_visibility Table
+Stores whether the Google Form is visible to employees.
+
+sql
+CREATE TABLE form_visibility (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    is_visible BOOLEAN DEFAULT TRUE
+);
+
+8)
+Insert Initial Data
+
+sql
+INSERT INTO form_visibility (is_visible) VALUES (1);
+
+9)
+Here’s the INSERT statement for your employees table:
+
+sql
+INSERT INTO employees (emp_id, email, otp) VALUES
+('SV_005', 'sanjanastudys@gmail.com', NULL);
+
+10)
+CREATE TABLE login_activity (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    emp_id VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    login_time DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+10)
+
+CREATE TABLE google_form_response (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(255),
+    employee_id VARCHAR(50),
+    mobile_number VARCHAR(15),
+    company_contact VARCHAR(15),
+    working_portfolio_name VARCHAR(255),
+    designation VARCHAR(255),
+    joining_date DATE,
+    manager_name VARCHAR(255),
+    supervisor_name VARCHAR(255),
+    telecaller_name VARCHAR(255),
+    allocation_count INT,
+    total_calls_visits INT,
+    total_monthly_collection DECIMAL(15, 2),
+    bank_id VARCHAR(50),
+    pvc_number VARCHAR(50)
+);
+
+
+11)
+Automatic Deletion of Old Data (After 4 Months)
+To delete records older than 4 months automatically, create a scheduled task in MySQL:
+
+sql
+Copy
+Edit
+CREATE EVENT IF NOT EXISTS delete_old_google_form_responses
+ON SCHEDULE EVERY 1 DAY
+DO 
+    DELETE FROM google_form_response WHERE submission_date < NOW() - INTERVAL 4 MONTH;
+This runs every day and deletes records older than 4 months.
+Ensure your MySQL event scheduler is enabled:
+
+SET GLOBAL event_scheduler = ON;
+
+12) changes in table
+USE employee_portal;
+ALTER TABLE employees ADD COLUMN password VARCHAR(255);
+
+12.1) used emp_id in all the routes so changing the COLUMN
+
+ALTER TABLE google_form_response
+CHANGE COLUMN employee_id emp_id VARCHAR(10);
+
+13)
+ALTER TABLE google_form_response
+MODIFY COLUMN full_name VARCHAR(255),
+MODIFY COLUMN emp_id VARCHAR(255),
+MODIFY COLUMN mobile_number VARCHAR(255),
+MODIFY COLUMN company_contact VARCHAR(255),
+MODIFY COLUMN working_portfolio_name VARCHAR(255),
+MODIFY COLUMN designation VARCHAR(255),
+MODIFY COLUMN joining_date VARCHAR(255),
+MODIFY COLUMN manager_name VARCHAR(255),
+MODIFY COLUMN supervisor_name VARCHAR(255),
+MODIFY COLUMN telecaller_name VARCHAR(255),
+MODIFY COLUMN allocation_count VARCHAR(255),
+MODIFY COLUMN total_calls_visits VARCHAR(255),
+MODIFY COLUMN total_monthly_collection VARCHAR(255),
+MODIFY COLUMN bank_id VARCHAR(255),
+MODIFY COLUMN pvc_number VARCHAR(255),
+MODIFY COLUMN submission_date VARCHAR(255);
+
+14)sets the submission_date automatically to the current stamp when the query is called
+
+ALTER TABLE google_form_response
+MODIFY COLUMN submission_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+
+15)
+ALTER TABLE employees
+ADD COLUMN name VARCHAR(100) NOT NULL,
+ADD COLUMN phoneno VARCHAR(15) NOT NULL,
+ADD COLUMN designation VARCHAR(100) NOT NULL,
+ADD COLUMN bloodgrp VARCHAR(10),
+ADD COLUMN doi VARCHAR(7);
+
+
+16)DROP TABLE IF EXISTS google_form_response;
+
+17)CREATE TABLE google_form_response (
+    ->     id INT AUTO_INCREMENT PRIMARY KEY,
+    ->     full_name VARCHAR(255) NOT NULL,
+    ->     emp_id VARCHAR(100) NOT NULL,
+    ->     mobile_number VARCHAR(20) NOT NULL,
+    ->     company_contact VARCHAR(20),
+    ->     portfolio_name VARCHAR(255) NOT NULL,
+    ->     designation VARCHAR(255) NOT NULL,
+    ->     joining_date DATE NOT NULL,
+    ->     manager_name VARCHAR(255) NOT NULL,
+    ->     supervisor_name VARCHAR(255) NOT NULL,
+    ->     telecaller_name VARCHAR(255) NOT NULL,
+    ->     allocation_count INT NOT NULL,
+    ->     total_calls INT NOT NULL,
+    ->     monthly_collection VARCHAR(100) NOT NULL,
+    ->     bank_id VARCHAR(100),
+    ->     pvc_number VARCHAR(100) NOT NULL,
+           submitted_at VARCHAR(100),
+           form_status TINYINT(1) DEFAULT 1;
+
+    -> );
+
+18)
+-- Rename full_name → name
+ALTER TABLE google_form_response CHANGE full_name name VARCHAR(255) NOT NULL;
+
+-- Rename mobile_number → phoneno
+ALTER TABLE google_form_response CHANGE mobile_number phoneno VARCHAR(20) NOT NULL;
+
+-- Rename joining_date → doi
+ALTER TABLE google_form_response CHANGE joining_date doi DATE NOT NULL;
+
+19)ALTER TABLE google_form_response MODIFY COLUMN monthly_collection VARCHAR(100) NULL;
+
+20)ALTER TABLE google_form_response
+ADD COLUMN month_of_submission VARCHAR(20);
+
+21)ALTER TABLE google_form_response
+DROP COLUMN pvc_number;
+
+22)
+CREATE TABLE cars (
+    reg_no VARCHAR(20) PRIMARY KEY,
+    owner VARCHAR(100),
+    chassis_no VARCHAR(50),
+    eng_no VARCHAR(50),
+    model VARCHAR(100),
+    product_branch VARCHAR(100),
+    flm VARCHAR(100),
+    arg_number_loan VARCHAR(50),
+    bkt VARCHAR(50)
+);
+
+23)CREATE TABLE admin_activity (
+    activity_id INT AUTO_INCREMENT PRIMARY KEY,
+    admin_id VARCHAR(20) NOT NULL,
+    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    logout_time TIMESTAMP NULL
+);
+
+24)ALTER TABLE employees
+ADD idcard LONGBLOB;

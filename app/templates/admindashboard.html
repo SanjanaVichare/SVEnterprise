@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admindashboard.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+</head>
+<body>
+    <div class="app-container">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+        <div class="background-blobs">
+            <div class="blob blob1"></div>
+            <div class="blob blob2"></div>
+            <div class="blob blob3"></div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header with Search -->
+            <header class="top-header">
+                <div class="logo">
+                    SV Enterprises
+                </div>
+
+
+                <div class="user-profile">
+                    <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+
+                    <div class="dropdown-footer">
+                        <button  class="top-logout-button" onclick="handleLogout()">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content" id="dashboardContent">
+                <div class="welcome-section">
+                    <h1 class="greeting">Good Morning, Admin!</h1>
+                    <p class="welcome-text gradient-text">What would you like to do? Click on the features to proceed.</p>
+                </div>
+
+                <div class="feature-cards">
+                    <!-- Form Status and File Upload Card (now expandable) -->
+                    <div class="feature-card tgform" id="Togglestatus" data-feature="toggleForm">
+                        <div class="card-icon blue">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <h3 class="card-title">Form & Data Management</h3>
+                            </div>
+                            <div id="form-status-message" class="status-message">
+                            </div>
+                            <p class="card-description">Manage forms and car data</p>
+                            <div class="card-action">
+                                <button class="action-button" onclick="expandFeature('toggleForm')">
+                                    <span>Manage</span>
+                                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Create Employee Card -->
+                    <div class="feature-card createEmployee" id="createEmployeeBox" data-feature="createEmployee">
+                        <div class="card-icon green">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Create New Employee</h3>
+                            <p class="card-description">Add a new user to the system.</p>
+                            <div class="card-action">
+                                <button class="action-button" onclick="expandFeature('createEmployee')">
+                                    <span>Create Now</span>
+                                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Employee List Card -->
+                    <div class="feature-card searchEmployee" id="employeeListBox" data-feature="employeeList">
+                        <div class="card-icon purple">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 00-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 010 7.75"></path>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Show Employees</h3>
+                            <p class="card-description">View and manage all employees in the system</p>
+                            <div class="card-action">
+                                <button class="action-button" onclick="expandFeature('employeeList')">
+                                    <span>View List</span>
+                                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Card -->
+                    <div class="feature-card activityEmployee" id="activityBox" data-feature="activity">
+                        <div class="card-icon orange">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 20v-6M21 12H3M12 4v6"></path>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Employee Login Activity</h3>
+                            <p class="card-description">Track and monitor employee login activities</p>
+                            <div class="card-action">
+                                <button class="action-button" onclick="expandFeature('activity')">
+                                    <span>View Activity</span>
+                                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Responses Card -->
+                    <div class="feature-card filterEmployee" id="formResponsesBox" data-feature="formResponses">
+                        <div class="card-icon teal">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="9" y1="9" x2="15" y2="9"></line>
+                                <line x1="9" y1="13" x2="15" y2="13"></line>
+                                <line x1="9" y1="17" x2="15" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="card-title">Download Form Responses</h3>
+                            <p class="card-description">Download and filter form responses data</p>
+                            <div class="card-action">
+
+                                <button class="action-button" onclick="expandFeature('formResponses')">
+                                    <span>Download Data</span>
+                                    <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature Expanded Views -->
+            <div class="feature-expanded-view hidden" id="toggleFormView">
+                <div class="feature-header">
+                    <div class="feature-title-container">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                        </svg>
+                        <h2 class="feature-title">Form & Data Management</h2>
+                    </div>
+                    <button class="close-btn" onclick="collapseFeature('toggleForm')">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18"></path>
+                            <path d="M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="feature-body">
+                    <div class="form-management-section">
+                        <h3 class="section-title">Form Status</h3>
+                        <div class="status-control">
+                            <p>Send out forms to employees:</p>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="formToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div id="form-status-message-expanded" class="status-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="file-upload-section">
+                        <h3 class="section-title">Update Car Database</h3>
+                        <form id="excelUploadForm" method="post" enctype="multipart/form-data" class="upload-form">
+                            <div class="form-group">
+                                <label for="excel_file">Select Excel File:</label>
+                                <input type="file" id="excel_file" name="excel_file" accept=".xlsx, .xls" required><BR>
+                                <P class="form-note">
+                                Required columns: REG NO, OWNER, CHASSIS NO, ENG NO, MODEL, PRODUCT / BRANCH, FLM, AGR.NO / LOAN, BKT
+                            </P>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="action-btn">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="17 8 12 3 7 8"></polyline>
+                                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                                    </svg>
+                                    Upload File
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-expanded-view hidden" id="createEmployeeView">
+                <div class="feature-header">
+                    <div class="feature-title-container">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <h2 class="feature-title">Create a New Employee</h2>
+                    </div>
+                    <button class="close-btn" onclick="collapseFeature('createEmployee')">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18"></path>
+                            <path d="M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="feature-body">
+                    <form id="createUserForm" enctype="multipart/form-data">
+                        <label for="emp_id">Employee ID:</label>
+                        <input type="text" id="emp_id" name="emp_id" required>
+
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+
+                        <label for="name">Name:</label>
+                        <input type="name" id="name" name="name" required>
+
+                        <label for="phoneno">Phone Number:</label>
+                        <input type="phoneno" id="phoneno" name="phoneno" required>
+
+                        <label for="photo">Photo:</label>
+                        <input type="file" id="photo" name="photo" accept="image/*" required>
+
+                        <label for="Designation">Designation:</label>
+                        <input type="Designation" id="Designation" name="Designation" required>
+
+                        <label for="bloodgrp">Blood group:</label>
+                        <input type="bloodgrp" id="bloodgrp" name="bloodgrp" required>
+
+                        <label for="doi">Date of issue:</label>
+                        <input type="date" id="doi" name="doi" required>
+
+                        <div class="form-actions">
+                            <button type="button" class="secondary-btn" onclick="collapseFeature('createEmployee')">Cancel</button>
+                            <button type="submit" class="action-btn">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 5v14M5 12h14"></path>
+                                </svg>Add User</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="feature-expanded-view hidden" id="employeeListView">
+                <div class="feature-header">
+                    <div class="feature-title-container">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 00-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 010 7.75"></path>
+                        </svg>
+                        <h2 class="feature-title">Show Employees</h2>
+                    </div>
+                    <button class="close-btn" onclick="collapseFeature('employeeList')">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18"></path>
+                            <path d="M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="feature-body">
+                    <div class="search-employee-container">
+                        <div class="search-inputs-horizontal">
+                            <div class="input-group">
+                                <label for="search_emp_id">Employee ID:</label>
+                                <input type="text" id="search_emp_id" name="search_emp_id">
+                            </div>
+                            <div class="input-group">
+                                <label for="search_name">Employee E-mail:</label>
+                                <input type="text" id="search_name" name="search_name">
+                            </div>
+                            <div class="input-group button-group">
+                                <button id="findUserBtn" class="action-btn" onclick="searchEmployee()">
+                                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                    Find User
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="employee-count" class="employee-count"></div>
+
+                    <div class="table-container">
+                        <table id="employeeTable">
+                            <thead>
+                                <tr>
+                                    <th>Employee ID</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div id="no-results" class="no-results hidden">No employees found</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-expanded-view hidden" id="activityView">
+                <div class="feature-header">
+                    <div class="feature-title-container">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 20v-6M21 12H3M12 4v6"></path>
+                        </svg>
+                        <h2 class="feature-title">Employee Login Activity</h2>
+                    </div>
+                    <button class="close-btn" onclick="collapseFeature('activity')">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18"></path>
+                            <path d="M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="feature-body">
+                    <button id="downloadActivityBtn" class="action-btn">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download as CSV
+                    </button>
+
+                    <div class="table-container">
+                        <table id="activityTable">
+                            <thead>
+                                <tr>
+                                    <th>Employee ID</th>
+                                    <th>Email</th>
+                                    <th>Login Time</th>
+                                    <th>Logout Time</th>
+
+                                </tr>
+                            </thead>
+                            <tbody id="activityTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="feature-expanded-view hidden" id="formResponsesView">
+                <div class="feature-header">
+                    <div class="feature-title-container">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="9" y1="9" x2="15" y2="9"></line>
+                            <line x1="9" y1="13" x2="15" y2="13"></line>
+                            <line x1="9" y1="17" x2="15" y2="17"></line>
+                        </svg>
+                        <h2 class="feature-title">Download Form Responses</h2>
+                    </div>
+                    <button class="close-btn" onclick="collapseFeature('formResponses')">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M18 6L6 18"></path>
+                            <path d="M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="feature-body">
+                    <form id="formResponsesForm">
+                        <div class="filter-inputs-horizontal">
+                            <div class="input-group">
+                                <label for="manager_name">Filter by Manager:</label>
+                                <select id="manager_name" name="manager_name">
+                                    <option value="">All Managers</option>
+                                        <option value="Jayesh Nagwekar">Jayesh Nagwekar</option>
+                                        <option value="Ratnakar Nalawade">Ratnakar Nalawade</option>
+                                        <option value="Bharati Sawant">Bharati Sawant</option>
+                                        <option value="Jagdish Sawant">Jagdish Sawant</option>
+                                        <option value="Suhas Bhoir">Suhas Bhoir</option>
+                                        <option value="Satish Jadhav">Satish Jadhav</option>
+                                        <option value="Laxman Gilbile">Laxman Gilbile</option>
+                                        <option value="Vishal Mishra">Vishal Mishra</option>
+                                        <option value="Komal Baviskar">Komal Baviskar</option>
+                                        <option value="Prakash Gahlot">Prakash Gahlot</option>
+                                        <option value="Ranjit Lashkare">Ranjit Lashkare</option>
+                                        <option value="Parashuram Mangale">Parashuram Mangale</option>
+                                        <option value="Fahad Batliwala">Fahad Batliwala</option>
+                                        <option value="Aamir Khan">Aamir Khan</option>
+                                        <option value="Appasaheb Bhosale">Appasaheb Bhosale</option>
+                                        <option value="Tejesh Aparat">Tejesh Aparat</option>
+                                        <option value="Vijay Yadav">Vijay Yadav</option>
+
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="emp_id">Filter by Employee ID:</label>
+                                <input type="text" id="emp_id" name="emp_id" placeholder="e.g., SV_123">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="month">Filter by Month:</label>
+                                <select id="month" name="month">
+                                    <option value="">All Months</option>
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                        <button type="button" class="action-btn" onclick="loadFilteredResponses()">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <span>Search</span>
+                        </button>
+                            <button type="button" class="action-btn" onclick="downloadFilteredResponses()">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Download Responses
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="responses-section">
+                        <h3 class="section-title">Form Responses</h3>
+                        <div class="table-container">
+                            <table id="responsesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Employee ID</th>
+                                        <th>Name</th>
+                                        <th>Manager</th>
+                                        <th>Designation</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="responsesTableBody">
+                                    <!-- Responses will be loaded here -->
+                                </tbody>
+                            </table>
+                            <div id="no-responses" class="no-results hidden">No responses found</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Confirm action</h2>
+                <button class="close-modal-btn">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18"></path>
+                        <path d="M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-cancel" class="secondary-btn">Cancel</button>
+                <button id="modal-confirm" class="action-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+    <div id="responseModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="response-title">Form Response</h2>
+            <button class="close-modal-btn" onclick="closeResponseModal()">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18"></path>
+                    <path d="M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-body scrollable-content">
+            <div id="responseContent"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="action-btn" onclick="closeResponseModal()">Close</button>
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="{{ url_for('static', filename='js/admindashboard.js')}}?v2"></script>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Cars - SV Enterprises</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/employeedashboard.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+</head>
+<body>
+    <div class="container">
+        <div class="background-blobs">
+            <div class="blob blob1"></div>
+            <div class="blob blob2"></div>
+            <div class="blob blob3"></div>
+        </div>
+
+        <header class="top-header">
+            <div class="logo">
+                SV Enterprises
+            </div>
+
+            <div class="user-profile">
+                 <button class="top-logout-button" onclick="handleLogout()">Logout</button>
+                 <a href="{{ url_for('main.employee_dashboard') }}" class="close-search-btn" id="closeSearchBtn">
+                Back
+                </svg>
+            </a>
+
+            </div>
+
+
+        </header>
+
+
+    <div class="search-box">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div id="flash-messages">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+        <div class="search-header">
+            <div class="search-title-container">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon blue-icon">
+                    <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2"></path>
+                    <circle cx="7" cy="17" r="2"></circle>
+                    <circle cx="17" cy="17" r="2"></circle>
+                </svg>
+                <h2 class="search-title">Car Search</h2>
+            </div>
+        </div>
+        <div class="search-content">
+            <form action="{{ url_for('main.search_car') }}" method="POST" class="search-form" id="carSearchForm">
+                <div class="form-group">
+                    <label for="reg_no">Enter Last 4 Digits of Registration Number:</label>
+                    <input type="text" id="reg_no" name="reg_no" class="search-input" placeholder="Enter 4 digits" maxlength="4" pattern="[0-9]{4}" title="Please enter exactly 4 digits" required>
+                    <button type="submit" class="search-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="button-icon">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        Search
+                    </button>
+                </div>
+            </form>
+
+            {% if search_performed %}
+                <div class="search-results">
+                    <h3>Search Results</h3>
+                    {% if not cars %}
+                        <div class="no-results">
+                            <p>No vehicles found matching your search criteria.</p>
+                        </div>
+                    {% else %}
+                        <div class="results-table-container">
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Registration No</th>
+                                        <th>Owner</th>
+                                        <th>Chassis No</th>
+                                        <th>Engine No</th>
+                                        <th>Model</th>
+                                        <th>Product/Branch</th>
+                                        <th>FLM</th>
+                                        <th>Arg Number/Loan</th>
+                                        <th>Bucket (BKT)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for car in cars %}
+                                    <tr>
+                                        <td>{{ car.reg_no }}</td>
+                                        <td>{{ car.owner }}</td>
+                                        <td>{{ car.chassis_no }}</td>
+                                        <td>{{ car.eng_no }}</td>
+                                        <td>{{ car.model }}</td>
+                                        <td>{{ car.product_branch }}</td>
+                                        <td>{{ car.flm }}</td>
+                                        <td>{{ car.arg_number_loan }}</td>
+                                        <td>{{ car.bkt }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+
+
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}">
+        document.addEventListener("DOMContentLoaded", () => {
+    const regInput = document.getElementById("reg_no");
+    const form = document.getElementById("carSearchForm");
+    const resultsContainer = document.querySelector(".search-results");
+
+    let timeout = null;
+
+    regInput.addEventListener("input", () => {
+        clearTimeout(timeout);
+        const query = regInput.value;
+
+        if (query.length === 4 && /^\d{4}$/.test(query)) {
+            timeout = setTimeout(() => {
+                fetch("/search", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    body: new URLSearchParams({
+                        reg_no: query
+                    })
+                })
+                .then(res => res.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, "text/html");
+                    const newResults = doc.querySelector(".search-results");
+                    if (newResults) {
+                        resultsContainer.innerHTML = newResults.innerHTML;
+                    }
+                });
+            }, 300); // Debounce input by 300ms
+        }
+    });
+});
+    </script>
+</body>
+</html>
