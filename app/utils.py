@@ -178,7 +178,7 @@ def get_db_connection():
     return mysql.connector.connect(
         host="shalakapoojari.mysql.pythonanywhere-services.com",
         user="shalakapoojari",
-        password="Shalaka@250125",
+        password="",
         database="shalakapoojari$sv"
     )
 
