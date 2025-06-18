@@ -10,7 +10,7 @@ class Config:
     # MySQL for PythonAnywhere
     MYSQL_HOST = 'SVEnterprise.mysql.pythonanywhere-services.com'
     MYSQL_USER = 'SVEnterprise'
-    MYSQL_PASSWORD = 'SVE@DB21'
+    MYSQL_PASSWORD = ''
     MYSQL_DB = 'SVEnterprise$sv'
     print("Loaded MAIL_USERNAME:", os.getenv("MAIL_USERNAME"))
     print("Loaded SECRET_KEY:", os.getenv("SECRET_KEY"))
@@ -20,7 +20,7 @@ class Config:
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = "sventerprise01@gmail.com"
-    MAIL_PASSWORD = "webl yztc yvjo sipj"
+    MAIL_PASSWORD = ""
 
     # Uploads
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
